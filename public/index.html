@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T-Gram</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ========== AUTH PAGE ========== -->
+  <div id="authPage" class="auth-page">
+    <div class="auth-bg-pattern"></div>
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-logo-icon"><i class="fa-solid fa-paper-plane"></i></div>
+        <h1>T-Gram</h1>
+        <p>Platform chat aman dan cepat</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Masuk</button>
+        <button class="auth-tab" data-tab="register">Daftar</button>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <div class="input-group">
+          <i class="fa-solid fa-at"></i>
+          <input type="text" id="loginUser" placeholder="Username" required autocomplete="username">
+        </div>
+        <div class="input-group">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="loginPass" placeholder="Password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-primary">Masuk</button>
+      </form>
+      <form id="registerForm" class="auth-form hidden">
+        <div class="input-group">
+          <i class="fa-solid fa-at"></i>
+          <input type="text" id="regUser" placeholder="Username (min. 3 karakter)" required>
+        </div>
+        <div class="input-group">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="regPass" placeholder="Password (min. 8 karakter)" required minlength="8">
+        </div>
+        <div class="input-group">
+          <i class="fa-solid fa-shield-halved"></i>
+          <input type="password" id="regPassConfirm" placeholder="Konfirmasi Password" required minlength="8">
+        </div>
+        <button type="submit" class="btn-primary">Daftar</button>
+      </form>
+      <div id="authError" class="auth-error hidden"></div>
+    </div>
+  </div>
+
+  <!-- ========== BAN PAGE ========== -->
+  <div id="banPage" class="ban-page hidden">
+    <div class="ban-card">
+      <i class="fa-solid fa-ban"></i>
+      <h2>Akses Ditolak</h2>
+      <p>IP Anda telah dibanned oleh admin. Anda tidak bisa login atau register.</p>
+    </div>
+  </div>
+
+  <!-- ========== MAIN PAGE ========== -->
+  <div id="mainPage" class="main-page hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <button id="menuBtn" class="icon-btn" title="Menu"><i class="fa-solid fa-bars"></i></button>
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Cari username...">
+        </div>
+      </div>
+      <div id="searchResults" class="search-results hidden"></div>
+      <div id="chatList" class="chat-list"></div>
+    </aside>
+
+    <!-- Chat Area -->
+    <main id="chatArea" class="chat-area">
+
+      <!-- Welcome Screen -->
+      <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-icon"><i class="fa-solid fa-paper-plane"></i></div>
+        <h2>T-Gram</h2>
+        <p>Pilih chat untuk mulai percakapan</p>
+      </div>
+
+      <!-- Active Chat -->
+      <div id="activeChat" class="active-chat hidden">
+        <div class="chat-header">
+          <button id="backBtn" class="icon-btn mobile-only"><i class="fa-solid fa-arrow-left"></i></button>
+          <div id="chatAvatar" class="chat-avatar"></div>
+          <div class="chat-header-info">
+            <div class="chat-name-row">
+              <span id="chatName" class="chat-name"></span>
+              <span id="chatBadge" class="badge hidden"></span>
+            </div>
+            <span id="chatStatus" class="chat-status"></span>
+          </div>
+          <button id="chatInfoBtn" class="icon-btn hidden" title="Info Grup"><i class="fa-solid fa-circle-info"></i></button>
+        </div>
+
+        <div id="e2eInfo" class="e2e-info hidden">
+          <i class="fa-solid fa-lock"></i> Pesan terenkripsi end-to-end. Privasi Anda terjaga.
+        </div>
+
+        <div id="botInfo" class="bot-info hidden">
+          <i class="fa-solid fa-robot"></i> <span id="botInfoText"></span>
+        </div>
+
+        <div id="messagesContainer" class="messages-container"></div>
+
+        <div class="chat-input-area">
+          <button id="attachBtn" class="icon-btn" title="Kirim Foto"><i class="fa-solid fa-paperclip"></i></button>
+          <input type="text" id="messageInput" placeholder="Ketik pesan..." autocomplete="off">
+          <button id="sendBtn" class="send-btn" title="Kirim"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========== SETTINGS PANEL ========== -->
+  <div id="settingsOverlay" class="overlay hidden"></div>
+  <div id="settingsPanel" class="settings-panel">
+    <div class="settings-header">
+      <button id="closeSettings" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+      <h3>Pengaturan</h3>
+    </div>
+    <div class="settings-content">
+
+      <!-- Profil -->
+      <div class="settings-profile">
+        <div id="settingsAvatar" class="settings-avatar"></div>
+        <div class="settings-profile-info">
+          <span id="settingsDisplayName" class="settings-displayname"></span>
+          <span id="settingsUsername" class="settings-username"></span>
+          <span id="settingsBadge" class="badge hidden"></span>
+        </div>
+      </div>
+
+      <!-- Edit Display Name -->
+      <div class="settings-section">
+        <div class="settings-item">
+          <i class="fa-solid fa-pen-to-square"></i>
+          <div class="settings-item-grow">
+            <span class="settings-item-title">Display Name</span>
+            <input type="text" id="editDisplayName" class="settings-input" placeholder="Display name baru">
+          </div>
+          <button id="saveDisplayName" class="btn-small">Simpan</button>
+        </div>
+      </div>
+
+      <!-- Foto Profil -->
+      <div class="settings-section">
+        <div class="settings-item clickable" id="changePhotoBtn">
+          <i class="fa-solid fa-camera"></i>
+          <span class="settings-item-title">Ubah Foto Profil</span>
+        </div>
+        <input type="file" id="profilePhotoInput" accept="image/*" class="hidden">
+      </div>
+
+      <!-- Theme Toggle -->
+      <div class="settings-section">
+        <div class="settings-item">
+          <i class="fa-solid fa-moon" id="themeIcon"></i>
+          <span class="settings-item-title" id="themeLabel">Mode Gelap</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="themeToggle" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Buat Grup -->
+      <div class="settings-section">
+        <div class="settings-item clickable" id="createGroupBtn">
+          <i class="fa-solid fa-users"></i>
+          <span class="settings-item-title">Buat Grup Baru</span>
+        </div>
+      </div>
+
+      <!-- TikTok -->
+      <div class="settings-section">
+        <a href="https://tiktok.com/@ieuakunkadua" target="_blank" rel="noopener" class="settings-item clickable tiktok-item">
+          <i class="fa-brands fa-tiktok"></i>
+          <span class="settings-item-title">TikTok</span>
+        </a>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <!-- Logout -->
+      <div class="settings-section">
+        <div class="settings-item clickable danger" id="logoutBtn">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span class="settings-item-title">Keluar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== GROUP CREATION MODAL ========== -->
+  <div id="groupModal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Buat Grup Baru</h3>
+        <button class="icon-btn" id="closeGroupModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <i class="fa-solid fa-hashtag"></i>
+          <input type="text" id="groupNameInput" placeholder="Nama Grup">
+        </div>
+        <div class="group-members-section">
+          <label>Member tambahan (username):</label>
+          <div id="groupMembersList" class="member-tags"></div>
+          <div class="add-member-row">
+            <input type="text" id="addMemberInput" placeholder="Username">
+            <button id="addMemberBtn" class="btn-small"><i class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="createGroupSubmit" class="btn-primary">Buat Grup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== GROUP INFO MODAL ========== -->
+  <div id="groupInfoModal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="groupInfoTitle">Info Grup</h3>
+        <button class="icon-btn" id="closeGroupInfo"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <label>Members:</label>
+        <div id="groupInfoMembers" class="member-list"></div>
+        <div class="add-member-row" style="margin-top:12px">
+          <input type="text" id="groupAddMemberInput" placeholder="Tambah username">
+          <button id="groupAddMemberBtn" class="btn-small"><i class="fa-solid fa-plus"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== TOAST ========== -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Hidden file input untuk kirim foto di chat -->
+  <input type="file" id="chatPhotoInput" accept="image/*" class="hidden">
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="index.js"></script>
+</body>
+  </html>
