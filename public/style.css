@@ -7,7 +7,6 @@
 }
 
 :root {
-  /* Light Mode */
   --bg: #f0f2f5;
   --bg-primary: #ffffff;
   --bg-secondary: #f0f2f5;
@@ -432,7 +431,6 @@ html, body {
   padding: 10px 14px;
   cursor: pointer;
   transition: background var(--transition);
-  border-radius: 0;
 }
 
 .chat-item:hover {
@@ -524,6 +522,7 @@ html, body {
   flex-direction: column;
   background: var(--bg-chat);
   position: relative;
+  min-width: 0;
   transition: background var(--transition);
 }
 
@@ -561,12 +560,13 @@ html, body {
   font-size: 14px;
 }
 
-/* Active Chat */
+/* Active Chat — FIX UTAMA */
 .active-chat {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  overflow: hidden;
 }
 
 .chat-header {
@@ -576,6 +576,7 @@ html, body {
   padding: 10px 16px;
   background: var(--bg-primary);
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
   transition: background var(--transition), border var(--transition);
 }
 
@@ -615,6 +616,7 @@ html, body {
   align-items: center;
   gap: 6px;
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
 .bot-info {
@@ -626,9 +628,10 @@ html, body {
   align-items: center;
   gap: 6px;
   border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
-/* Messages */
+/* Messages — FIX: min-height: 0 supaya tidak dorong input keluar */
 .messages-container {
   flex: 1;
   overflow-y: auto;
@@ -636,6 +639,7 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-height: 0;
 }
 
 .message-row {
@@ -708,27 +712,35 @@ html, body {
   max-width: 80%;
 }
 
-/* Chat Input */
+/* Chat Input — FIX UTAMA: flex-shrink:0 + z-index + border jelas */
 .chat-input-area {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 10px 12px;
   background: var(--bg-primary);
   border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  z-index: 5;
   transition: background var(--transition), border var(--transition);
 }
 
 .chat-input-area input[type="text"] {
   flex: 1;
-  border: none;
+  border: 2px solid var(--border);
   background: var(--bg-secondary);
   border-radius: 22px;
-  padding: 10px 16px;
+  padding: 11px 18px;
   font-family: inherit;
   font-size: 14px;
   color: var(--text);
   outline: none;
+  min-width: 0;
+  transition: border-color var(--transition);
+}
+
+.chat-input-area input[type="text"]:focus {
+  border-color: var(--accent);
 }
 
 .chat-input-area input[type="text"]::placeholder {
@@ -736,8 +748,8 @@ html, body {
 }
 
 .send-btn {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border: none;
   border-radius: 50%;
   background: var(--accent);
@@ -1127,7 +1139,7 @@ html, body {
 
 @keyframes toastIn {
   from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to { opacity: 1; transform:  translateX(-50%) translateY(0); }
 }
 
 /* ========== SCROLLBAR ========== */
